@@ -94,7 +94,7 @@
 
                              <h3><b>SIG</b> </h3>
 
-                             <a href="/index.html" class="btn btn-info add-new"><i ></i>Visor Geográfico</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                             <a href="visor/index.html" class="btn btn-info add-new"><i ></i>Visor Geográfico</a> &nbsp;&nbsp;&nbsp;&nbsp;
 
 
                              </div>
