@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/RED_VIAL_URBANA_DE_CUYUJA_3.js"></script>
+        <script src="data/CURVAS_DE_NIVEL_CUYUJA_4.js"></script>
+        <script src="data/LIMITE_PARROQUIAL_CUYUJA_5.js"></script>
+        <script src="data/MANZANAS_CUYUJA1_6.js"></script>
+        <script src="data/MANZANAS_CUYUJA_7.js"></script>
+        <script src="data/PREDIOS_CUYUJA_8.js"></script>
+        <script src="data/EDIFICACIONES_CUYUJA_9.js"></script>
+        <script src="data/COOREDANDASDEPREDIOS_10.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-0.41696711463185393,-78.02650943554089],[-0.4147960183626023,-78.02379144988404]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        var layer_WazeWorld_0 = L.tileLayer('https://worldtiles3.waze.com/tiles/{z}/{x}/{y}.png', {
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_WazeWorld_0;
+        map.addLayer(layer_WazeWorld_0);
+        var layer_GoogleHybrid_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleHybrid_1;
+        map.addLayer(layer_GoogleHybrid_1);
+        var layer_OpenStreetMap_2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OpenStreetMap_2;
+        map.addLayer(layer_OpenStreetMap_2);
+        function pop_RED_VIAL_URBANA_DE_CUYUJA_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID_1'] !== null ? Autolinker.link(feature.properties['OBJECTID_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? Autolinker.link(feature.properties['Shape_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_RED_VIAL_URBANA_DE_CUYUJA_3_0() {
+            return {
+                pane: 'pane_RED_VIAL_URBANA_DE_CUYUJA_3',
+                opacity: 1,
+                color: 'rgba(195,37,16,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_RED_VIAL_URBANA_DE_CUYUJA_3');
+        map.getPane('pane_RED_VIAL_URBANA_DE_CUYUJA_3').style.zIndex = 403;
+        map.getPane('pane_RED_VIAL_URBANA_DE_CUYUJA_3').style['mix-blend-mode'] = 'normal';
+        var layer_RED_VIAL_URBANA_DE_CUYUJA_3 = new L.geoJson(json_RED_VIAL_URBANA_DE_CUYUJA_3, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_RED_VIAL_URBANA_DE_CUYUJA_3',
+            layerName: 'layer_RED_VIAL_URBANA_DE_CUYUJA_3',
+            pane: 'pane_RED_VIAL_URBANA_DE_CUYUJA_3',
+            onEachFeature: pop_RED_VIAL_URBANA_DE_CUYUJA_3,
+            style: style_RED_VIAL_URBANA_DE_CUYUJA_3_0,
+        });
+        bounds_group.addLayer(layer_RED_VIAL_URBANA_DE_CUYUJA_3);
+        map.addLayer(layer_RED_VIAL_URBANA_DE_CUYUJA_3);
+        function pop_CURVAS_DE_NIVEL_CUYUJA_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID_1'] !== null ? Autolinker.link(feature.properties['OBJECTID_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Elevation'] !== null ? Autolinker.link(feature.properties['Elevation'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['hqc'] !== null ? Autolinker.link(feature.properties['hqc'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['hqc_desc'] !== null ? Autolinker.link(feature.properties['hqc_desc'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ela'] !== null ? Autolinker.link(feature.properties['ela'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ela_desc'] !== null ? Autolinker.link(feature.properties['ela_desc'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['crv'] !== null ? Autolinker.link(feature.properties['crv'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['crv_desc'] !== null ? Autolinker.link(feature.properties['crv_desc'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fcode'] !== null ? Autolinker.link(feature.properties['fcode'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['descripcio'] !== null ? Autolinker.link(feature.properties['descripcio'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? Autolinker.link(feature.properties['Shape_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['categoria'] !== null ? Autolinker.link(feature.properties['categoria'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CURVAS_DE_NIVEL_CUYUJA_4_0() {
+            return {
+                pane: 'pane_CURVAS_DE_NIVEL_CUYUJA_4',
+                opacity: 1,
+                color: 'rgba(6,6,7,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_CURVAS_DE_NIVEL_CUYUJA_4');
+        map.getPane('pane_CURVAS_DE_NIVEL_CUYUJA_4').style.zIndex = 404;
+        map.getPane('pane_CURVAS_DE_NIVEL_CUYUJA_4').style['mix-blend-mode'] = 'normal';
+        var layer_CURVAS_DE_NIVEL_CUYUJA_4 = new L.geoJson(json_CURVAS_DE_NIVEL_CUYUJA_4, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_CURVAS_DE_NIVEL_CUYUJA_4',
+            layerName: 'layer_CURVAS_DE_NIVEL_CUYUJA_4',
+            pane: 'pane_CURVAS_DE_NIVEL_CUYUJA_4',
+            onEachFeature: pop_CURVAS_DE_NIVEL_CUYUJA_4,
+            style: style_CURVAS_DE_NIVEL_CUYUJA_4_0,
+        });
+        bounds_group.addLayer(layer_CURVAS_DE_NIVEL_CUYUJA_4);
+        map.addLayer(layer_CURVAS_DE_NIVEL_CUYUJA_4);
+        function pop_LIMITE_PARROQUIAL_CUYUJA_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FID_'] !== null ? Autolinker.link(feature.properties['FID_'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PARROQUIAS'] !== null ? Autolinker.link(feature.properties['PARROQUIAS'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? Autolinker.link(feature.properties['Shape_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Area'] !== null ? Autolinker.link(feature.properties['Shape_Area'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_LIMITE_PARROQUIAL_CUYUJA_5_0() {
+            return {
+                pane: 'pane_LIMITE_PARROQUIAL_CUYUJA_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(190,178,151,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_LIMITE_PARROQUIAL_CUYUJA_5');
+        map.getPane('pane_LIMITE_PARROQUIAL_CUYUJA_5').style.zIndex = 405;
+        map.getPane('pane_LIMITE_PARROQUIAL_CUYUJA_5').style['mix-blend-mode'] = 'normal';
+        var layer_LIMITE_PARROQUIAL_CUYUJA_5 = new L.geoJson(json_LIMITE_PARROQUIAL_CUYUJA_5, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_LIMITE_PARROQUIAL_CUYUJA_5',
+            layerName: 'layer_LIMITE_PARROQUIAL_CUYUJA_5',
+            pane: 'pane_LIMITE_PARROQUIAL_CUYUJA_5',
+            onEachFeature: pop_LIMITE_PARROQUIAL_CUYUJA_5,
+            style: style_LIMITE_PARROQUIAL_CUYUJA_5_0,
+        });
+        bounds_group.addLayer(layer_LIMITE_PARROQUIAL_CUYUJA_5);
+        map.addLayer(layer_LIMITE_PARROQUIAL_CUYUJA_5);
+        function pop_MANZANAS_CUYUJA1_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['prov_cod'] !== null ? Autolinker.link(feature.properties['prov_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['cant_cod'] !== null ? Autolinker.link(feature.properties['cant_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parr_cod'] !== null ? Autolinker.link(feature.properties['parr_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['zona_cod'] !== null ? Autolinker.link(feature.properties['zona_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['sector_cod'] !== null ? Autolinker.link(feature.properties['sector_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['mzn_cod'] !== null ? Autolinker.link(feature.properties['mzn_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['clave'] !== null ? Autolinker.link(feature.properties['clave'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fcode'] !== null ? Autolinker.link(feature.properties['fcode'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Leng'] !== null ? Autolinker.link(feature.properties['SHAPE_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Area'] !== null ? Autolinker.link(feature.properties['SHAPE_Area'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MANZANAS_CUYUJA1_6_0() {
+            return {
+                pane: 'pane_MANZANAS_CUYUJA1_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,182,54,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_MANZANAS_CUYUJA1_6');
+        map.getPane('pane_MANZANAS_CUYUJA1_6').style.zIndex = 406;
+        map.getPane('pane_MANZANAS_CUYUJA1_6').style['mix-blend-mode'] = 'normal';
+        var layer_MANZANAS_CUYUJA1_6 = new L.geoJson(json_MANZANAS_CUYUJA1_6, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_MANZANAS_CUYUJA1_6',
+            layerName: 'layer_MANZANAS_CUYUJA1_6',
+            pane: 'pane_MANZANAS_CUYUJA1_6',
+            onEachFeature: pop_MANZANAS_CUYUJA1_6,
+            style: style_MANZANAS_CUYUJA1_6_0,
+        });
+        bounds_group.addLayer(layer_MANZANAS_CUYUJA1_6);
+        map.addLayer(layer_MANZANAS_CUYUJA1_6);
+        function pop_MANZANAS_CUYUJA_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['prov_cod'] !== null ? Autolinker.link(feature.properties['prov_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['cant_cod'] !== null ? Autolinker.link(feature.properties['cant_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parr_cod'] !== null ? Autolinker.link(feature.properties['parr_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['zona_cod'] !== null ? Autolinker.link(feature.properties['zona_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['sector_cod'] !== null ? Autolinker.link(feature.properties['sector_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['mzn_cod'] !== null ? Autolinker.link(feature.properties['mzn_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['clave'] !== null ? Autolinker.link(feature.properties['clave'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fcode'] !== null ? Autolinker.link(feature.properties['fcode'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Leng'] !== null ? Autolinker.link(feature.properties['SHAPE_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Area'] !== null ? Autolinker.link(feature.properties['SHAPE_Area'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MANZANAS_CUYUJA_7_0() {
+            return {
+                pane: 'pane_MANZANAS_CUYUJA_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(196,60,57,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_MANZANAS_CUYUJA_7');
+        map.getPane('pane_MANZANAS_CUYUJA_7').style.zIndex = 407;
+        map.getPane('pane_MANZANAS_CUYUJA_7').style['mix-blend-mode'] = 'normal';
+        var layer_MANZANAS_CUYUJA_7 = new L.geoJson(json_MANZANAS_CUYUJA_7, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_MANZANAS_CUYUJA_7',
+            layerName: 'layer_MANZANAS_CUYUJA_7',
+            pane: 'pane_MANZANAS_CUYUJA_7',
+            onEachFeature: pop_MANZANAS_CUYUJA_7,
+            style: style_MANZANAS_CUYUJA_7_0,
+        });
+        bounds_group.addLayer(layer_MANZANAS_CUYUJA_7);
+        map.addLayer(layer_MANZANAS_CUYUJA_7);
+        function pop_PREDIOS_CUYUJA_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">OBJECTID</th>\
+                        <td>' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">prov_cod</th>\
+                        <td>' + (feature.properties['prov_cod'] !== null ? Autolinker.link(feature.properties['prov_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">cant_cod</th>\
+                        <td>' + (feature.properties['cant_cod'] !== null ? Autolinker.link(feature.properties['cant_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">parr_cod</th>\
+                        <td>' + (feature.properties['parr_cod'] !== null ? Autolinker.link(feature.properties['parr_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">zona_cod</th>\
+                        <td>' + (feature.properties['zona_cod'] !== null ? Autolinker.link(feature.properties['zona_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">sector_cod</th>\
+                        <td>' + (feature.properties['sector_cod'] !== null ? Autolinker.link(feature.properties['sector_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">mzn_cod</th>\
+                        <td>' + (feature.properties['mzn_cod'] !== null ? Autolinker.link(feature.properties['mzn_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">lot_cod</th>\
+                        <td>' + (feature.properties['lot_cod'] !== null ? Autolinker.link(feature.properties['lot_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">clave</th>\
+                        <td>' + (feature.properties['clave'] !== null ? Autolinker.link(feature.properties['clave'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">fcode</th>\
+                        <td>' + (feature.properties['fcode'] !== null ? Autolinker.link(feature.properties['fcode'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SHAPE_Leng</th>\
+                        <td>' + (feature.properties['SHAPE_Leng'] !== null ? Autolinker.link(feature.properties['SHAPE_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SHAPE_Area</th>\
+                        <td>' + (feature.properties['SHAPE_Area'] !== null ? Autolinker.link(feature.properties['SHAPE_Area'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PREDIOS_CUYUJA_8_0() {
+            return {
+                pane: 'pane_PREDIOS_CUYUJA_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(184,115,141,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PREDIOS_CUYUJA_8');
+        map.getPane('pane_PREDIOS_CUYUJA_8').style.zIndex = 408;
+        map.getPane('pane_PREDIOS_CUYUJA_8').style['mix-blend-mode'] = 'normal';
+        var layer_PREDIOS_CUYUJA_8 = new L.geoJson(json_PREDIOS_CUYUJA_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PREDIOS_CUYUJA_8',
+            layerName: 'layer_PREDIOS_CUYUJA_8',
+            pane: 'pane_PREDIOS_CUYUJA_8',
+            onEachFeature: pop_PREDIOS_CUYUJA_8,
+            style: style_PREDIOS_CUYUJA_8_0,
+        });
+        bounds_group.addLayer(layer_PREDIOS_CUYUJA_8);
+        map.addLayer(layer_PREDIOS_CUYUJA_8);
+        function pop_EDIFICACIONES_CUYUJA_9(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['prov_cod'] !== null ? Autolinker.link(feature.properties['prov_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['cant_cod'] !== null ? Autolinker.link(feature.properties['cant_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parr_cod'] !== null ? Autolinker.link(feature.properties['parr_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['zona_cod'] !== null ? Autolinker.link(feature.properties['zona_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['sector_cod'] !== null ? Autolinker.link(feature.properties['sector_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['mzn_cod'] !== null ? Autolinker.link(feature.properties['mzn_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lot_cod'] !== null ? Autolinker.link(feature.properties['lot_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['bloq_num'] !== null ? Autolinker.link(feature.properties['bloq_num'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['piso_num'] !== null ? Autolinker.link(feature.properties['piso_num'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['uni_num'] !== null ? Autolinker.link(feature.properties['uni_num'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['clave'] !== null ? Autolinker.link(feature.properties['clave'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fcode'] !== null ? Autolinker.link(feature.properties['fcode'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Leng'] !== null ? Autolinker.link(feature.properties['SHAPE_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Area'] !== null ? Autolinker.link(feature.properties['SHAPE_Area'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_EDIFICACIONES_CUYUJA_9_0() {
+            return {
+                pane: 'pane_EDIFICACIONES_CUYUJA_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,75,35,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_EDIFICACIONES_CUYUJA_9');
+        map.getPane('pane_EDIFICACIONES_CUYUJA_9').style.zIndex = 409;
+        map.getPane('pane_EDIFICACIONES_CUYUJA_9').style['mix-blend-mode'] = 'normal';
+        var layer_EDIFICACIONES_CUYUJA_9 = new L.geoJson(json_EDIFICACIONES_CUYUJA_9, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_EDIFICACIONES_CUYUJA_9',
+            layerName: 'layer_EDIFICACIONES_CUYUJA_9',
+            pane: 'pane_EDIFICACIONES_CUYUJA_9',
+            onEachFeature: pop_EDIFICACIONES_CUYUJA_9,
+            style: style_EDIFICACIONES_CUYUJA_9_0,
+        });
+        bounds_group.addLayer(layer_EDIFICACIONES_CUYUJA_9);
+        map.addLayer(layer_EDIFICACIONES_CUYUJA_9);
+        function pop_COOREDANDASDEPREDIOS_10(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">OBJECTID</th>\
+                        <td>' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">prov_cod</th>\
+                        <td>' + (feature.properties['prov_cod'] !== null ? Autolinker.link(feature.properties['prov_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">cant_cod</th>\
+                        <td>' + (feature.properties['cant_cod'] !== null ? Autolinker.link(feature.properties['cant_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">parr_cod</th>\
+                        <td>' + (feature.properties['parr_cod'] !== null ? Autolinker.link(feature.properties['parr_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">zona_cod</th>\
+                        <td>' + (feature.properties['zona_cod'] !== null ? Autolinker.link(feature.properties['zona_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">sector_cod</th>\
+                        <td>' + (feature.properties['sector_cod'] !== null ? Autolinker.link(feature.properties['sector_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">mzn_cod</th>\
+                        <td>' + (feature.properties['mzn_cod'] !== null ? Autolinker.link(feature.properties['mzn_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">lot_cod</th>\
+                        <td>' + (feature.properties['lot_cod'] !== null ? Autolinker.link(feature.properties['lot_cod'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">clave</th>\
+                        <td>' + (feature.properties['clave'] !== null ? Autolinker.link(feature.properties['clave'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">fcode</th>\
+                        <td>' + (feature.properties['fcode'] !== null ? Autolinker.link(feature.properties['fcode'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SHAPE_Leng</th>\
+                        <td>' + (feature.properties['SHAPE_Leng'] !== null ? Autolinker.link(feature.properties['SHAPE_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SHAPE_Area</th>\
+                        <td>' + (feature.properties['SHAPE_Area'] !== null ? Autolinker.link(feature.properties['SHAPE_Area'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ORIG_FID</th>\
+                        <td>' + (feature.properties['ORIG_FID'] !== null ? Autolinker.link(feature.properties['ORIG_FID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">LONGITUD</th>\
+                        <td>' + (feature.properties['LONGITUD'] !== null ? Autolinker.link(feature.properties['LONGITUD'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">LATITUD</th>\
+                        <td>' + (feature.properties['LATITUD'] !== null ? Autolinker.link(feature.properties['LATITUD'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_COOREDANDASDEPREDIOS_10_0() {
+            return {
+                pane: 'pane_COOREDANDASDEPREDIOS_10',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(47,234,51,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_COOREDANDASDEPREDIOS_10');
+        map.getPane('pane_COOREDANDASDEPREDIOS_10').style.zIndex = 410;
+        map.getPane('pane_COOREDANDASDEPREDIOS_10').style['mix-blend-mode'] = 'normal';
+        var layer_COOREDANDASDEPREDIOS_10 = new L.geoJson(json_COOREDANDASDEPREDIOS_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_COOREDANDASDEPREDIOS_10',
+            layerName: 'layer_COOREDANDASDEPREDIOS_10',
+            pane: 'pane_COOREDANDASDEPREDIOS_10',
+            onEachFeature: pop_COOREDANDASDEPREDIOS_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_COOREDANDASDEPREDIOS_10_0(feature));
+            },
+        });
+        var cluster_COOREDANDASDEPREDIOS_10 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_COOREDANDASDEPREDIOS_10.addLayer(layer_COOREDANDASDEPREDIOS_10);
+
+        bounds_group.addLayer(layer_COOREDANDASDEPREDIOS_10);
+        cluster_COOREDANDASDEPREDIOS_10.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/COOREDANDASDEPREDIOS_10.png" /> COOREDANDAS DE PREDIOS': cluster_COOREDANDASDEPREDIOS_10,'<img src="legend/EDIFICACIONES_CUYUJA_9.png" /> EDIFICACIONES_CUYUJA': layer_EDIFICACIONES_CUYUJA_9,'<img src="legend/PREDIOS_CUYUJA_8.png" /> PREDIOS_CUYUJA': layer_PREDIOS_CUYUJA_8,'<img src="legend/MANZANAS_CUYUJA_7.png" /> MANZANAS_CUYUJA': layer_MANZANAS_CUYUJA_7,'<img src="legend/MANZANAS_CUYUJA1_6.png" /> MANZANAS_CUYUJA1': layer_MANZANAS_CUYUJA1_6,'<img src="legend/LIMITE_PARROQUIAL_CUYUJA_5.png" /> LIMITE_PARROQUIAL_CUYUJA': layer_LIMITE_PARROQUIAL_CUYUJA_5,'<img src="legend/CURVAS_DE_NIVEL_CUYUJA_4.png" /> CURVAS_DE_NIVEL_CUYUJA': layer_CURVAS_DE_NIVEL_CUYUJA_4,'<img src="legend/RED_VIAL_URBANA_DE_CUYUJA_3.png" /> RED_VIAL_URBANA_DE_CUYUJA': layer_RED_VIAL_URBANA_DE_CUYUJA_3,"OpenStreetMap": layer_OpenStreetMap_2,"Google Hybrid": layer_GoogleHybrid_1,"Waze (World)": layer_WazeWorld_0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_COOREDANDASDEPREDIOS_10.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['clave'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Ubuntu\', sans-serif;">' + layer.feature.properties['clave']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_COOREDANDASDEPREDIOS_10'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"clave": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + key).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + key).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + key).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_clave = document.createElement('div');
+            div_clave.id = "div_clave";
+            div_clave.className= "filterselect";
+            document.getElementById("menu").appendChild(div_clave);
+            sel_clave = document.createElement('select');
+            sel_clave.multiple = true;
+            sel_clave.size = 10;
+            sel_clave.id = "sel_clave";
+            var clave_options_str = "<option value='' unselected></option>";
+            sel_clave.onchange = function(){filterFunc()};            
+
+            clave_options_str  += '<option value="1507520301001001">1507520301001001</option>';
+            
+            clave_options_str  += '<option value="1507520301001002">1507520301001002</option>';
+
+
+            clave_options_str  += '<option value="1507520301003001">1507520301003001</option>';
+
+
+            clave_options_str  += '<option value="1507520301003002">1507520301003002</option>';
+
+            clave_options_str  += '<option value="1507520301003003">1507520301003003</option>';
+
+            clave_options_str  += '<option value="1507520301004001">1507520301004001</option>';
+
+
+            clave_options_str  += '<option value="1507520301004002">1507520301004002</option>';
+
+            clave_options_str  += '<option value="1507520301004003">1507520301004003</option>';
+
+            clave_options_str  += '<option value="1507520301004004">1507520301004004</option>';
+
+            clave_options_str  += '<option value="1507520301004005">1507520301004005</option>';
+
+            clave_options_str  += '<option value="1507520301004006">1507520301004006</option>';
+
+            clave_options_str  += '<option value="1507520301004007">1507520301004007</option>';
+
+            clave_options_str  += '<option value="1507520301004008">1507520301004008</option>';
+
+            clave_options_str  += '<option value="1507520301004009">1507520301004009</option>';
+
+            clave_options_str  += '<option value="1507520301004010">1507520301004010</option>';
+            clave_options_str  += '<option value="1507520301004011">1507520301004011</option>';
+
+            clave_options_str  += '<option value="1507520301004012">1507520301004012</option>';
+            clave_options_str  += '<option value="1507520301004013">1507520301004013</option>';
+            clave_options_str  += '<option value="1507520301004014">1507520301004014</option>';
+
+            clave_options_str  += '<option value="1507520301004015">1507520301004015</option>';
+            
+            clave_options_str  += '<option value="1507520301004016">1507520301004016</option>';
+
+            clave_options_str  += '<option value="1507520301005001">1507520301005001</option>';
+            
+            clave_options_str  += '<option value="1507520301005002">1507520301005002</option>';
+
+
+            clave_options_str  += '<option value="1507520301005003">1507520301005003</option>';
+            clave_options_str  += '<option value="1507520301005004">1507520301005004</option>';
+
+            clave_options_str  += '<option value="1507520301005005">1507520301005005</option>';
+
+            clave_options_str  += '<option value="1507520301005006">1507520301005006</option>';
+
+            clave_options_str  += '<option value="1507520301005007">1507520301005007</option>';
+
+            clave_options_str  += '<option value="1507520301005008">1507520301005008</option>';
+            clave_options_str  += '<option value="1507520301005009">1507520301005009</option>';
+
+
+            clave_options_str  += '<option value="1507520301006001">1507520301006001</option>';
+            clave_options_str  += '<option value="1507520301006002">1507520301006002</option>';
+
+            clave_options_str  += '<option value="1507520301006003">1507520301006003</option>';
+
+
+            clave_options_str  += '<option value="1507520301007001">1507520301007001</option>';
+
+
+            clave_options_str  += '<option value="1507520301007002">1507520301007002</option>';
+
+
+            clave_options_str  += '<option value="1507520301007003">1507520301007003</option>';
+
+
+            clave_options_str  += '<option value="1507520301007004">1507520301007004</option>';
+
+
+            clave_options_str  += '<option value="1507520301007005">1507520301007005</option>';
+
+
+            clave_options_str  += '<option value="1507520301008001">1507520301008001</option>';
+
+
+            clave_options_str  += '<option value="1507520301008002">1507520301008002</option>';
+
+            clave_options_str  += '<option value="1507520301008003">1507520301008003</option>';
+            clave_options_str  += '<option value="1507520301008007">1507520301008007</option>';
+            clave_options_str  += '<option value="1507520301008008">1507520301008008</option>';
+
+            clave_options_str  += '<option value="1507520301009001">1507520301009001</option>';
+            clave_options_str  += '<option value="1507520301009002">1507520301009002</option>';
+
+            clave_options_str  += '<option value="1507520301009003">1507520301009003</option>';
+
+
+            clave_options_str  += '<option value="1507520301010001">1507520301010001</option>';
+
+
+            clave_options_str  += '<option value="1507520301010002">1507520301010002</option>';
+
+
+            clave_options_str  += '<option value="1507520301010003">1507520301010003</option>';
+
+
+            clave_options_str  += '<option value="1507520301011001">1507520301011001</option>';
+
+            clave_options_str  += '<option value="1507520301011002">1507520301011002</option>';
+
+
+            clave_options_str  += '<option value="1507520301011003">1507520301011003</option>';
+
+
+            clave_options_str  += '<option value="1507520301012001">1507520301012001</option>';
+        
+            clave_options_str  += '<option value="1507520301012002">1507520301012002</option>';
+
+
+            clave_options_str  += '<option value="1507520301012003">1507520301012003</option>';
+
+            clave_options_str  += '<option value="1507520301012004">1507520301012004</option>';
+
+            clave_options_str  += '<option value="1507520301012005">1507520301012005</option>';
+
+
+            clave_options_str  += '<option value="1507520301013001">1507520301013001</option>';
+
+            clave_options_str  += '<option value="1507520301013002">1507520301013002</option>';
+            clave_options_str  += '<option value="1507520301013003">1507520301013003</option>';
+
+            clave_options_str  += '<option value="1507520301013004">1507520301013004</option>';
+
+            clave_options_str  += '<option value="1507520301013005">1507520301013005</option>';
+            clave_options_str  += '<option value="1507520301013006">1507520301013006</option>';
+            
+            clave_options_str  += '<option value="1507520301013007">1507520301013007</option>';
+
+
+            clave_options_str  += '<option value="1507520301014001">1507520301014001</option>';
+
+            clave_options_str  += '<option value="1507520301014002">1507520301014002</option>';
+
+            clave_options_str  += '<option value="1507520301014003">1507520301014003</option>';
+
+            clave_options_str  += '<option value="1507520301014004">1507520301014004</option>';
+            clave_options_str  += '<option value="1507520301014005">1507520301014005</option>';
+            clave_options_str  += '<option value="1507520301014006">1507520301014006</option>';
+            clave_options_str  += '<option value="1507520301014007">1507520301014007</option>';
+            clave_options_str  += '<option value="1507520301014008">1507520301014008</option>';
+            
+            clave_options_str  += '<option value="1507520301014009">1507520301014009</option>';
+
+            clave_options_str  += '<option value="1507520301015001">1507520301015001</option>';
+           
+            clave_options_str  += '<option value="1507520301015002">1507520301015002</option>';
+            
+            clave_options_str  += '<option value="1507520301015003">1507520301015003</option>';
+            
+            clave_options_str  += '<option value="1507520301016001">1507520301016001</option>';
+            
+            clave_options_str  += '<option value="1507520301017001">1507520301017001</option>';
+           
+            clave_options_str  += '<option value="1507520301017002">1507520301017002</option>';
+           
+            clave_options_str  += '<option value="1507520301017003">1507520301017003</option>';
+            clave_options_str  += '<option value="1507520301017004">1507520301017004</option>';
+            clave_options_str  += '<option value="1507520301017005">1507520301017005</option>';
+
+            clave_options_str  += '<option value="1507520301018001">1507520301018001</option>';
+
+            clave_options_str  += '<option value="1507520301019001">1507520301019001</option>';
+
+            clave_options_str  += '<option value="1507520301019002">1507520301019002</option>';
+
+            clave_options_str  += '<option value="1507520301019003">1507520301019003</option>';
+            
+            clave_options_str  += '<option value="1507520301019004">1507520301019004</option>';
+
+            clave_options_str  += '<option value="1507520301019005">1507520301019005</option>';
+
+            clave_options_str  += '<option value="1507520301019006">1507520301019006</option>';
+
+            clave_options_str  += '<option value="1507520301019007">1507520301019007</option>';
+
+            clave_options_str  += '<option value="1507520301021001">1507520301021001</option>';
+
+            clave_options_str  += '<option value="1507520301021002">1507520301021002</option>';
+            clave_options_str  += '<option value="1507520301021003">1507520301021003</option>';
+
+            clave_options_str  += '<option value="1507520301021004">1507520301021004</option>';
+
+            clave_options_str  += '<option value="1507520301021005">1507520301021005</option>';
+
+            clave_options_str  += '<option value="1507520301021006">1507520301021006</option>';
+
+            clave_options_str  += '<option value="1507520301021007">1507520301021007</option>';
+            clave_options_str  += '<option value="1507520301021008">1507520301021008</option>';
+
+            clave_options_str  += '<option value="1507520301021009">1507520301021009</option>';
+
+            clave_options_str  += '<option value="1507520301021010">1507520301021010</option>';
+
+            clave_options_str  += '<option value="1507520301021011">1507520301021011</option>';
+            clave_options_str  += '<option value="1507520301021012">1507520301021012</option>';
+
+            clave_options_str  += '<option value="1507520301021013">1507520301021013</option>';
+            clave_options_str  += '<option value="1507520301021014">1507520301021014</option>';
+
+            clave_options_str  += '<option value="1507520301022001">1507520301022001</option>';
+            clave_options_str  += '<option value="1507520301022002">1507520301022002</option>';
+
+            clave_options_str  += '<option value="1507520301023001">1507520301023001</option>';
+           
+            clave_options_str  += '<option value="1507520301023002">1507520301023002</option>';
+            clave_options_str  += '<option value="1507520301023003">1507520301023003</option>';
+            clave_options_str  += '<option value="1507520301023004">1507520301023004</option>';
+
+            clave_options_str  += '<option value="1507520301023005">1507520301023005</option>';
+
+            clave_options_str  += '<option value="1507520301023006">1507520301023006</option>';
+            clave_options_str  += '<option value="1507520301023007">1507520301023007</option>';
+
+            clave_options_str  += '<option value="1507520301023008">1507520301023008</option>';
+
+            clave_options_str  += '<option value="1507520301024001">1507520301024001</option>';
+            clave_options_str  += '<option value="1507520301024002">1507520301024002</option>';
+
+            clave_options_str  += '<option value="1507520301024003">1507520301024003</option>';
+
+            clave_options_str  += '<option value="1507520301025001">1507520301025001</option>';
+
+            clave_options_str  += '<option value="1507520301025002">1507520301025002</option>';
+
+            clave_options_str  += '<option value="1507520301026001">1507520301026001</option>';
+            
+            clave_options_str  += '<option value="1507520301026002">1507520301026002</option>';
+            
+            clave_options_str  += '<option value="1507520301026003">1507520301026003</option>';
+            
+            clave_options_str  += '<option value="1507520301027001">1507520301027001</option>';
+            clave_options_str  += '<option value="1507520301027002">1507520301027002</option>';
+
+            clave_options_str  += '<option value="1507520301028001">1507520301028001</option>';
+
+            clave_options_str  += '<option value="1507520301029001">1507520301029001</option>';
+
+            clave_options_str  += '<option value="1507520301031001">1507520301031001</option>';
+            clave_options_str  += '<option value="1507520301031002">1507520301031002</option>';
+            
+            clave_options_str  += '<option value="1507520301031003">1507520301031003</option>';
+                        
+            clave_options_str  += '<option value="1507520301031004">1507520301031004</option>';
+            clave_options_str  += '<option value="1507520301031005">1507520301031005</option>';
+
+            clave_options_str  += '<option value="1507520301032004">1507520301032004</option>';
+            clave_options_str  += '<option value="1507520301032005">1507520301032005</option>';
+            clave_options_str  += '<option value="1507520301032006">1507520301032006</option>';
+
+            sel_clave.innerHTML = clave_options_str;
+            div_clave.appendChild(sel_clave);
+            var lab_clave = document.createElement('div');
+            lab_clave.innerHTML = 'clave';
+            lab_clave.className = 'filterlabel';
+            div_clave.appendChild(lab_clave);
+            var reset_clave = document.createElement('div');
+            reset_clave.innerHTML = 'clear filter';
+            reset_clave.className = 'filterlabel';
+            reset_clave.onclick = function() {
+                var options = document.getElementById("sel_clave").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_clave.appendChild(reset_clave);
+        resetLabels([layer_PREDIOS_CUYUJA_8,layer_COOREDANDASDEPREDIOS_10]);
+        map.on("zoomend", function(){
+            resetLabels([layer_PREDIOS_CUYUJA_8,layer_COOREDANDASDEPREDIOS_10]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_PREDIOS_CUYUJA_8,layer_COOREDANDASDEPREDIOS_10]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_PREDIOS_CUYUJA_8,layer_COOREDANDASDEPREDIOS_10]);
+        });
+        </script>
+    </body>
+</html>
